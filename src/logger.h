@@ -5,11 +5,7 @@
 extern "C" {
 #endif
 
-#include <stdlib.h>
 #include <stdio.h>
-#include <time.h>
-#include <stdarg.h>
-#include <unistd.h>
 
 #define LOG_DEBUG 0
 #define LOG_INFO  1
@@ -27,13 +23,12 @@ struct _logger {
 
 typedef struct _logger logger;
 
-logger * logger_create(void);
-void logger_free(logger *l);
-void log_add(logger *l, int level, const char *msg);
-void log_debug(logger *l, const char *fmt, ...);
-void log_info(logger *l, const char *fmt, ...);
-void log_warn(logger *l, const char *fmt, ...);
-void log_error(logger *l, const char *fmt, ...);
+bool logger_create(void);
+void logger_free(void);
+void log_debug(const char *fmt, ...);
+void log_info(const char *fmt, ...);
+void log_warn(const char *fmt, ...);
+void log_error(const char *fmt, ...);
 
 #ifdef __cplusplus
 }

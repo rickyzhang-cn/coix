@@ -1,0 +1,6 @@
+{
+	"port" : 8080,
+	"addr" : "192.168.153.153",
+	"thread_num" : 64,
+	"htdocs" : "./htdocs"
+}
