@@ -67,7 +67,7 @@ void  thpool_thread_do (thpool_t *tp_p);
  * @return : int
  */
 
-int thpool_t_add_work (thpool_t *tp_p ,void* (*function_p) (void *), void* arg_p );
+int thpool_add_work (thpool_t *tp_p ,void* (*function_p) (void *), void* arg_p );
 
 
 /*

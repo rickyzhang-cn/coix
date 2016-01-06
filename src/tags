@@ -1,0 +1,195 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+LOG_DEBUG	logger.h	10;"	d
+LOG_ERROR	logger.h	13;"	d
+LOG_INFO	logger.h	11;"	d
+LOG_LEVEL_CHARS	logger.h	15;"	d
+LOG_MAX_MSG_LEN	logger.h	16;"	d
+LOG_WARN	logger.h	12;"	d
+MAX_ADDR_LEN	server.h	3;"	d
+MAX_BUF_SIZE	http.h	1;"	d
+MAX_CL_SIZE	http.h	7;"	d
+MAX_CONTENT_SIZE	http.h	6;"	d
+MAX_HEADER_SIZE	http.h	5;"	d
+MAX_METHOD_SIZE	http.h	2;"	d
+MAX_PATH_SIZE	http.h	4;"	d
+MAX_PATH_SIZE	server.h	4;"	d
+MAX_URI_SIZE	http.h	3;"	d
+THREAD_POOL_H	thread_pool.h	2;"	d
+_CRT_SECURE_NO_WARNINGS	json.c	34;"	d	file:
+_JSON_H	json.h	32;"	d
+_LOGGER_H_	logger.h	2;"	d
+_json_object_entry	json.h	/^typedef struct _json_object_entry$/;"	s
+_json_value	json.h	/^         inline _json_value ()$/;"	f	struct:_json_value
+_json_value	json.h	/^typedef struct _json_value$/;"	s
+_logger	logger.h	/^struct _logger {$/;"	s
+_reserved	json.h	/^   } _reserved;$/;"	m	struct:_json_value	typeref:union:_json_value::__anon7
+addr	server.h	/^	char *addr;$/;"	m	struct:config
+arg	thread_pool.h	/^    void                    *arg ;    \/\/函数的参数$/;"	m	struct:thpool_job_t
+array	json.h	/^      } array;$/;"	m	union:_json_value::__anon3	typeref:struct:_json_value::__anon3::__anon6
+begin	json.h	/^         decltype(values) begin () const$/;"	f	struct:_json_value::__anon3::__anon5
+begin	json.h	/^         decltype(values) begin () const$/;"	f	struct:_json_value::__anon3::__anon6
+boolean	json.h	/^      int boolean;$/;"	m	union:_json_value::__anon3
+cmd_options_parse	coix.c	/^void cmd_options_parse(int argc, char *argv[]) {$/;"	f
+coix_init	coix.c	/^void coix_init(int argc, char *agrv[], struct server *srv_p) {$/;"	f
+col	json.h	/^      unsigned int line, col;$/;"	m	struct:_json_value
+conf	server.h	/^	struct config conf;$/;"	m	struct:server	typeref:struct:server::config
+config	server.h	/^struct config {$/;"	s
+config_path	server.h	/^	char *config_path;$/;"	m	struct:config
+content	http.h	/^	char content[MAX_CONTENT_SIZE];$/;"	m	struct:http_request
+content_length	http.h	/^	char content_length[MAX_CL_SIZE];$/;"	m	struct:http_request
+cur_col	json.c	/^   unsigned int cur_line, cur_col;$/;"	m	struct:__anon8	file:
+cur_line	json.c	/^   unsigned int cur_line, cur_col;$/;"	m	struct:__anon8	file:
+datetime_format	logger.h	/^	char *datetime_format;$/;"	m	struct:_logger
+dbl	json.h	/^      double dbl;$/;"	m	union:_json_value::__anon3
+default_alloc	json.c	/^static void * default_alloc (size_t size, int zero, void * user_data)$/;"	f	file:
+default_free	json.c	/^static void default_free (void * ptr, void * user_data)$/;"	f	file:
+end	json.h	/^         decltype(values) end () const$/;"	f	struct:_json_value::__anon3::__anon5
+end	json.h	/^         decltype(values) end () const$/;"	f	struct:_json_value::__anon3::__anon6
+epoll_add	coix.c	/^int epoll_add(int epoll_fd, int srv_fd) {$/;"	f
+epoll_fd	server.h	/^	int epoll_fd;$/;"	m	struct:server
+ext	http.c	/^        char *ext;$/;"	m	struct:__anon9	file:
+extensions	http.c	/^} extensions [] = { $/;"	v	typeref:struct:__anon9
+first_pass	json.c	/^   int first_pass;$/;"	m	struct:__anon8	file:
+flag_block_comment	json.c	/^   flag_block_comment    = 1 << 14;$/;"	v	file:
+flag_done	json.c	/^   flag_done             = 1 << 7,$/;"	v	file:
+flag_escaped	json.c	/^   flag_escaped          = 1 << 4,$/;"	v	file:
+flag_line_comment	json.c	/^   flag_line_comment     = 1 << 13,$/;"	v	file:
+flag_need_colon	json.c	/^   flag_need_colon       = 1 << 6,$/;"	v	file:
+flag_need_comma	json.c	/^   flag_need_comma       = 1 << 2,$/;"	v	file:
+flag_next	json.c	/^   flag_next             = 1 << 0,$/;"	v	file:
+flag_num_e	json.c	/^   flag_num_e            = 1 << 10,$/;"	v	file:
+flag_num_e_got_sign	json.c	/^   flag_num_e_got_sign   = 1 << 11,$/;"	v	file:
+flag_num_e_negative	json.c	/^   flag_num_e_negative   = 1 << 12,$/;"	v	file:
+flag_num_negative	json.c	/^   flag_num_negative     = 1 << 8,$/;"	v	file:
+flag_num_zero	json.c	/^   flag_num_zero         = 1 << 9,$/;"	v	file:
+flag_reproc	json.c	/^   flag_reproc           = 1 << 1,$/;"	v	file:
+flag_seek_value	json.c	/^   flag_seek_value       = 1 << 3, $/;"	v	file:
+flag_string	json.c	/^   flag_string           = 1 << 5,$/;"	v	file:
+fp	logger.h	/^	FILE *fp;$/;"	m	struct:_logger
+function	thread_pool.h	/^    void   (*function)(void* arg);    \/\/函数指针$/;"	m	struct:thpool_job_t
+get_filetype	http.c	/^void get_filetype(char *uri,char **filetype)$/;"	f
+head	thread_pool.h	/^    thpool_job_t    *head ;           \/\/队列的头指针$/;"	m	struct:thpool_jobqueue
+hex_value	json.c	/^static unsigned char hex_value (json_char c)$/;"	f	file:
+htdocs	server.h	/^	char *htdocs;$/;"	m	struct:config
+http_request	http.h	/^struct http_request {$/;"	s
+http_request_parse	http.c	/^void http_request_parse(char *rb_buf,struct http_request *req) {$/;"	f
+integer	json.h	/^      json_int_t integer;$/;"	m	union:_json_value::__anon3
+jobqueue	thread_pool.h	/^    thpool_jobqueue    *jobqueue;        \/\/工作队列的指针$/;"	m	struct:thpool_t
+jobsN	thread_pool.h	/^    int             jobsN;           \/\/队列中工作的个数$/;"	m	struct:thpool_jobqueue
+json_alloc	json.c	/^static void * json_alloc (json_state * state, unsigned long size, int zero)$/;"	f	file:
+json_array	json.h	/^   json_array,$/;"	e	enum:__anon2
+json_boolean	json.h	/^   json_boolean,$/;"	e	enum:__anon2
+json_char	json.h	35;"	d
+json_double	json.h	/^   json_double,$/;"	e	enum:__anon2
+json_enable_comments	json.h	75;"	d
+json_error_max	json.h	261;"	d
+json_int_t	json.h	41;"	d
+json_int_t	json.h	43;"	d
+json_integer	json.h	/^   json_integer,$/;"	e	enum:__anon2
+json_none	json.h	/^   json_none,$/;"	e	enum:__anon2
+json_null	json.h	/^   json_null$/;"	e	enum:__anon2
+json_object	json.h	/^   json_object,$/;"	e	enum:__anon2
+json_object_entry	json.h	/^} json_object_entry;$/;"	t	typeref:struct:_json_object_entry
+json_options_parse	coix.c	/^void json_options_parse(struct config *conf_p) {$/;"	f
+json_parse	json.c	/^json_value * json_parse (const json_char * json, size_t length)$/;"	f
+json_parse_ex	json.c	/^json_value * json_parse_ex (json_settings * settings,$/;"	f
+json_settings	json.h	/^} json_settings;$/;"	t	typeref:struct:__anon1
+json_state	json.c	/^} json_state;$/;"	t	typeref:struct:__anon8	file:
+json_string	json.h	/^   json_string,$/;"	e	enum:__anon2
+json_type	json.h	/^} json_type;$/;"	t	typeref:enum:__anon2
+json_uchar	json.c	/^typedef unsigned int json_uchar;$/;"	t	file:
+json_value	json.h	/^} json_value;$/;"	t	typeref:struct:_json_value
+json_value_free	json.c	/^void json_value_free (json_value * value)$/;"	f
+json_value_free_ex	json.c	/^void json_value_free_ex (json_settings * settings, json_value * value)$/;"	f
+json_value_none	json.c	/^const struct _json_value json_value_none;$/;"	v	typeref:struct:_json_value
+length	json.h	/^         unsigned int length;$/;"	m	struct:_json_value::__anon3::__anon4
+length	json.h	/^         unsigned int length;$/;"	m	struct:_json_value::__anon3::__anon5
+length	json.h	/^         unsigned int length;$/;"	m	struct:_json_value::__anon3::__anon6
+level	logger.h	/^	int level;$/;"	m	struct:_logger
+line	json.h	/^      unsigned int line, col;$/;"	m	struct:_json_value
+line_and_col	json.c	201;"	d	file:
+listenfd_create	coix.c	/^int listenfd_create(struct config *conf_p) {$/;"	f
+log_add	logger.c	/^static void log_add(int level, const char *msg)$/;"	f	file:
+log_debug	logger.c	/^void log_debug(const char *fmt, ...)$/;"	f
+log_error	logger.c	/^void log_error(const char *fmt, ...)$/;"	f
+log_info	logger.c	/^void log_info(const char *fmt, ...)$/;"	f
+log_p	logger.c	/^static logger *log_p;$/;"	v	file:
+log_warn	logger.c	/^void log_warn(const char *fmt, ...)$/;"	f
+logger	logger.h	/^typedef struct _logger logger;$/;"	t	typeref:struct:_logger
+logger_create	logger.c	/^bool logger_create(void)$/;"	f
+logger_free	logger.c	/^void logger_free(void)$/;"	f
+main	coix.c	/^int main(int argc, char *argv[]) {	$/;"	f
+max_memory	json.h	/^   unsigned long max_memory;$/;"	m	struct:__anon1
+mem_alloc	json.h	/^   void * (* mem_alloc) (size_t, int zero, void * user_data);$/;"	m	struct:__anon1
+mem_free	json.h	/^   void (* mem_free) (void *, void * user_data);$/;"	m	struct:__anon1
+method	http.h	/^	char method[MAX_METHOD_SIZE];$/;"	m	struct:http_request
+mutex	thread_pool.c	/^pthread_mutex_t  mutex  = PTHREAD_MUTEX_INITIALIZER ;  \/\/静态赋值法初始化互斥锁$/;"	v
+mutex_p	thread_pool.h	/^    pthread_mutex_t     *mutex_p ;$/;"	m	struct:thread_data
+name	json.h	/^    json_char * name;$/;"	m	struct:_json_object_entry
+name_length	json.h	/^    unsigned int name_length;$/;"	m	struct:_json_object_entry
+new_value	json.c	/^static int new_value (json_state * state,$/;"	f	file:
+next	thread_pool.h	/^    struct tpool_job_t     *next ;    \/\/指向下一个任务$/;"	m	struct:thpool_job_t	typeref:struct:thpool_job_t::tpool_job_t
+next_alloc	json.h	/^      struct _json_value * next_alloc;$/;"	m	union:_json_value::__anon7	typeref:struct:_json_value::__anon7::_json_value
+object	json.h	/^      } object;$/;"	m	union:_json_value::__anon3	typeref:struct:_json_value::__anon3::__anon5
+object_mem	json.h	/^      void * object_mem;$/;"	m	union:_json_value::__anon7
+operator []	json.h	/^         inline const struct _json_value &operator [] (const char * index) const$/;"	f	struct:_json_value
+operator []	json.h	/^         inline const struct _json_value &operator [] (int index) const$/;"	f	struct:_json_value
+operator bool	json.h	/^         inline operator bool () const$/;"	f	struct:_json_value
+operator const char *	json.h	/^         inline operator const char * () const$/;"	f	struct:_json_value
+operator double	json.h	/^         inline operator double () const$/;"	f	struct:_json_value
+operator json_int_t	json.h	/^         inline operator json_int_t () const$/;"	f	struct:_json_value
+parent	json.h	/^   struct _json_value * parent;$/;"	m	struct:_json_value	typeref:struct:_json_value::_json_value
+port	server.h	/^	unsigned int port;$/;"	m	struct:config
+prev	thread_pool.h	/^    struct tpool_job_t     *prev ;    \/\/指向前一个任务$/;"	m	struct:thpool_job_t	typeref:struct:thpool_job_t::tpool_job_t
+process_value	coix.c	/^void process_value(json_value *value, struct config *conf_p) {$/;"	f
+ptr	json.c	/^   const json_char * ptr;$/;"	m	struct:__anon8	file:
+ptr	json.h	/^         json_char * ptr; \/* null terminated *\/$/;"	m	struct:_json_value::__anon3::__anon4
+queueSem	thread_pool.h	/^    sem_t           *queueSem;        \/\/原子信号量$/;"	m	struct:thpool_jobqueue
+server	server.h	/^struct server {$/;"	s
+settings	json.c	/^   json_settings settings;$/;"	m	struct:__anon8	file:
+settings	json.h	/^   int settings;$/;"	m	struct:__anon1
+srv_fd	server.h	/^	int srv_fd;$/;"	m	struct:server
+string	json.h	/^      } string;$/;"	m	union:_json_value::__anon3	typeref:struct:_json_value::__anon3::__anon4
+string_add	json.c	198;"	d	file:
+tail	thread_pool.h	/^    thpool_job_t    *tail;            \/\/对列的尾指针$/;"	m	struct:thpool_jobqueue
+thpool_add_work	thread_pool.c	/^int thpool_add_work (thpool_t *tp_p ,void * (*function_p )(void *), void *arg_p){$/;"	f
+thpool_destory	thread_pool.c	/^void thpool_destory (thpool_t *tp_p){$/;"	f
+thpool_init	thread_pool.c	/^thpool_t * thpool_init (int threadsN){$/;"	f
+thpool_job_t	thread_pool.h	/^typedef struct thpool_job_t {$/;"	s
+thpool_job_t	thread_pool.h	/^}thpool_job_t ;$/;"	t	typeref:struct:thpool_job_t
+thpool_jobqueue	thread_pool.h	/^typedef struct thpool_jobqueue {$/;"	s
+thpool_jobqueue	thread_pool.h	/^}thpool_jobqueue;$/;"	t	typeref:struct:thpool_jobqueue
+thpool_jobqueue_add	thread_pool.c	/^void thpool_jobqueue_add (thpool_t *tp_p , thpool_job_t *newjob_p){$/;"	f
+thpool_jobqueue_empty	thread_pool.c	/^void thpool_jobqueue_empty (thpool_t *tp_p)$/;"	f
+thpool_jobqueue_init	thread_pool.c	/^int thpool_jobqueue_init (thpool_t *tp_p)$/;"	f
+thpool_jobqueue_peek	thread_pool.c	/^thpool_job_t * thpool_jobqueue_peek (thpool_t *tp_p){$/;"	f
+thpool_jobqueue_removelast	thread_pool.c	/^int thpool_jobqueue_removelast (thpool_t *tp_p){$/;"	f
+thpool_keepalive	thread_pool.c	/^static int thpool_keepalive = 1 ;   \/\/线程池保持存活$/;"	v	file:
+thpool_t	thread_pool.h	/^typedef struct thpool_t {$/;"	s
+thpool_t	thread_pool.h	/^}thpool_t;$/;"	t	typeref:struct:thpool_t
+thpool_thread_do	thread_pool.c	/^void thpool_thread_do (thpool_t *tp_p){$/;"	f
+thread_data	thread_pool.h	/^typedef struct thread_data{$/;"	s
+thread_data	thread_pool.h	/^}thread_data;$/;"	t	typeref:struct:thread_data
+thread_num	server.h	/^	unsigned int thread_num;$/;"	m	struct:config
+threads	thread_pool.h	/^    pthread_t          *threads ;        \/\/线程的ID$/;"	m	struct:thpool_t
+threadsN	thread_pool.h	/^    int                 threadsN ;        \/\/线程的数量$/;"	m	struct:thpool_t
+tp_p	server.h	/^	thpool_t *tp_p;$/;"	m	struct:server
+tp_p	thread_pool.h	/^    thpool_t            *tp_p ;$/;"	m	struct:thread_data
+type	http.c	/^        char *type;$/;"	m	struct:__anon9	file:
+type	json.h	/^   json_type type;$/;"	m	struct:_json_value
+u	json.h	/^   } u;$/;"	m	struct:_json_value	typeref:union:_json_value::__anon3
+uint_max	json.c	/^   unsigned int uint_max;$/;"	m	struct:__anon8	file:
+ulong_max	json.c	/^   unsigned long ulong_max;$/;"	m	struct:__anon8	file:
+uri	http.h	/^	char uri[MAX_URI_SIZE];$/;"	m	struct:http_request
+used_memory	json.c	/^   unsigned long used_memory;$/;"	m	struct:__anon8	file:
+user_data	json.h	/^   void * user_data;  \/* will be passed to mem_alloc and mem_free *\/$/;"	m	struct:__anon1
+value	json.h	/^    struct _json_value * value;$/;"	m	struct:_json_object_entry	typeref:struct:_json_object_entry::_json_value
+value_extra	json.h	/^   size_t value_extra;  \/* how much extra space to allocate for values? *\/$/;"	m	struct:__anon1
+values	json.h	/^         json_object_entry * values;$/;"	m	struct:_json_value::__anon3::__anon5
+values	json.h	/^         struct _json_value ** values;$/;"	m	struct:_json_value::__anon3::__anon6	typeref:struct:_json_value::__anon3::__anon6::_json_value
+whitespace	json.c	194;"	d	file:

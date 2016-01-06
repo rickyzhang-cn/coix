@@ -1,3 +1,5 @@
+#ifndef __SERVER_H_
+#define __SERVER_H_
 #include "thread_pool.h"
 
 #define MAX_ADDR_LEN 16
@@ -16,4 +18,5 @@ struct server {
 	int srv_fd;
 	int epoll_fd;
 	thpool_t *tp_p;
-}
+};
+#endif

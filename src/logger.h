@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include <stdio.h>
+#include <stdbool.h>
 
 #define LOG_DEBUG 0
 #define LOG_INFO  1
