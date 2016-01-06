@@ -21,12 +21,18 @@
 
 #define MAX_EVENT_NUM 1024
 
+static struct server *g_srv_p;
+char *default_config_file="/home/rickyzhang/coix/conf/coix.json";
+
 int listenfd_create(struct config *conf_p) {
 	int srv_fd=socket(AF_INET,SOCK_STREAM,0);
 	if(srv_fd == -1)
 		log_error("socekt() fails");
 
-	struct sockaddr_in srv_addr;
+    int reuse = 1;
+    setsockopt(srv_fd,SOL_SOCKET,SO_REUSEADDR,&reuse,sizeof(reuse));
+	
+    struct sockaddr_in srv_addr;
 	memset(&srv_addr,0,sizeof(srv_addr));
 	srv_addr.sin_family=AF_INET;
 	srv_addr.sin_port=htons(conf_p->port);
@@ -60,8 +66,9 @@ void coix_init(int argc, char *argv[], struct server *srv_p) {
 	
 	cmd_options_parse(argc,argv,&srv_p->conf);
 
-	if(srv_p->conf.config_path != NULL)
-		json_options_parse(&srv_p->conf);
+	if(srv_p->conf.config_path == NULL)
+        srv_p->conf.config_path=default_config_file;
+	json_options_parse(&srv_p->conf);
 
 	srv_p->srv_fd=listenfd_create(&srv_p->conf);
 
@@ -84,7 +91,7 @@ void handle_request(int cli_fd, char *rd_buf) {
     struct http_request req;
     http_request_parse(rd_buf,&req);
     printf("method:%s uri:%s\n",req.method,req.uri);
-    send_response(cli_fd,&req);
+    send_response(cli_fd,&req,&g_srv_p->conf);
     close(cli_fd);
 }
 
@@ -104,6 +111,8 @@ int main(int argc, char *argv[]) {
 	memset(srv_p,0,sizeof(struct server));
 
 	coix_init(argc,argv,srv_p);
+
+    g_srv_p=srv_p;
 
 	int epoll_fd=srv_p->epoll_fd;
     int srv_fd=srv_p->srv_fd;

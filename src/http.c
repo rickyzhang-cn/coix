@@ -194,8 +194,8 @@ static void cgi_post(int cli_fd, char *file_path, struct http_request *req) {
     }
 }
 
-void send_response(int cli_fd, struct http_request *req) {
-    char *htdocs="htdocs";
+void send_response(int cli_fd, struct http_request *req, struct config *conf_p) {
+    char *htdocs=conf_p->htdocs;
     if(strncmp("GET",req->method,strlen("GET")) == 0) {
         char *query_string=req->uri;
         int cgi_flag=0;
@@ -236,6 +236,5 @@ void send_response(int cli_fd, struct http_request *req) {
             cgi_post(cli_fd,file_path,req);
         }
         
-    }
-    
+    } 
 }

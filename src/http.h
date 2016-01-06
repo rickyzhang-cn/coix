@@ -1,5 +1,6 @@
 #ifndef __HTTP_H_
 #define __HTTP_H_
+#include "server.h"
 
 #define MAX_BUF_SIZE (64*1024)
 #define MAX_METHOD_SIZE 5
@@ -18,6 +19,6 @@ struct http_request {
 
 
 void http_request_parse(char *rb_buf,struct http_request *req);
-void send_response(int cli_fd, struct http_request *req);
+void send_response(int cli_fd, struct http_request *req, struct config *conf_p);
 
 #endif

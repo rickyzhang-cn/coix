@@ -53,13 +53,17 @@ static void process_value(json_value *value, struct config *conf_p) {
 	for(int i=0;i<len;i++) {
 		char *key=value->u.object.values[i].name;
 		if(!strcmp(key,"port")) {
-			conf_p->port=value->u.object.values[i].value->u.integer;
+            if(conf_p->port == 0)
+			    conf_p->port=value->u.object.values[i].value->u.integer;
 		} else if(!strcmp(key,"addr")) {
-			conf_p->addr=strdup(value->u.object.values[i].value->u.string.ptr);
+            if(conf_p->addr == NULL)
+			    conf_p->addr=strdup(value->u.object.values[i].value->u.string.ptr);
 		} else if(!strcmp(key,"thread_num")) {
-			conf_p->thread_num=value->u.object.values[i].value->u.integer;
+            if(conf_p->thread_num == 0)
+			    conf_p->thread_num=value->u.object.values[i].value->u.integer;
 		} else if(!strcmp(key,"htdocs")) {
-			conf_p->htdocs=strdup(value->u.object.values[i].value->u.string.ptr);
+            if(conf_p->htdocs == NULL)
+			    conf_p->htdocs=strdup(value->u.object.values[i].value->u.string.ptr);
 		} else {
 			log_warn("has not this option:%s",key);
 		}

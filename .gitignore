@@ -28,8 +28,6 @@
 *.x86_64
 *.hex
 
-# Tags file
-^tags$
 
 # Debug files
 *.dSYM/
