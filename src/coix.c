@@ -96,7 +96,7 @@ void handle_request(int cli_fd, char *rd_buf) {
 }
 
 void* cli_handler(void *arg) {
-    int cli_fd=*((int *)arg);
+    int cli_fd=(int)arg;
     char rd_buf[MAX_BUF_SIZE];
     int n=read(cli_fd,rd_buf,MAX_BUF_SIZE);
     handle_request(cli_fd,rd_buf);
@@ -137,7 +137,7 @@ int main(int argc, char *argv[]) {
                         if(errno == EINTR)
                             continue;
 				    }
-				    thpool_add_work(tp_p,cli_handler,&cli_fd);
+				    thpool_add_work(tp_p,cli_handler,(void *)cli_fd);
                 }
 			} else {
 				log_warn("should not happen:srv_fd=%d,events[%d].data.fd=%d"
