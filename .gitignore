@@ -31,5 +31,8 @@
 # tags file
 src/tags
 
+# objs directory
+objs/*
+
 # Debug files
 *.dSYM/
