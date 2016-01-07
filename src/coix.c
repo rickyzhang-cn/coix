@@ -120,16 +120,25 @@ int main(int argc, char *argv[]) {
 	while(1) {
 		struct epoll_event events[MAX_EVENT_NUM];
 		int n=epoll_wait(epoll_fd,events,MAX_EVENT_NUM,-1);
+        log_info("epoll start");
 		for(int i=0;i<n;i++) {
+            log_info("epoll n=%d",n);
 			if(events[i].data.fd == srv_fd) {
 				struct sockaddr_in cli_addr;
 				int len=sizeof(cli_addr);
-				int cli_fd=accept(srv_fd,(struct sockaddr *)&cli_addr,&len);
-				if(cli_fd == -1) {
-					log_warn("accept() cli_fd=-1");
-					continue;
-				}
-				thpool_add_work(tp_p,cli_handler,&cli_fd);
+                while(1) {
+				    int cli_fd=accept(srv_fd,(struct sockaddr *)&cli_addr,&len);
+                    log_info("cli_fd=%d",cli_fd);
+				    if(cli_fd == -1) {
+					    if(errno==EAGAIN || errno==EWOULDBLOCK) {
+                            log_info("epoll break");
+					        break;
+                        }
+                        if(errno == EINTR)
+                            continue;
+				    }
+				    thpool_add_work(tp_p,cli_handler,&cli_fd);
+                }
 			} else {
 				log_warn("should not happen:srv_fd=%d,events[%d].data.fd=%d"
 						,srv_fd,i,events[i].data.fd);
