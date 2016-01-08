@@ -50,14 +50,6 @@ int listenfd_create(struct config *conf_p) {
 	return srv_fd;
 }
 
-
-int epoll_add(int epoll_fd, int srv_fd) {
-	struct epoll_event ev;
-	ev.events = EPOLLIN | EPOLLET;
-	ev.data.fd=srv_fd;
-	return epoll_ctl(epoll_fd,EPOLL_CTL_ADD,srv_fd,&ev);
-}
-
 void coix_init(int argc, char *argv[], struct server *srv_p) {
 	if(logger_create() != true) {
 		printf("logger_create() fails\n");
@@ -87,10 +79,10 @@ void coix_init(int argc, char *argv[], struct server *srv_p) {
 }
 
 void handle_request(int cli_fd, char *rd_buf) {
-    printf("%s",rd_buf);
+    log_info("%s",rd_buf);
     struct http_request req;
     http_request_parse(rd_buf,&req);
-    printf("method:%s uri:%s\n",req.method,req.uri);
+    log_info("method:%s uri:%s\n",req.method,req.uri);
     send_response(cli_fd,&req,&g_srv_p->conf);
     close(cli_fd);
 }

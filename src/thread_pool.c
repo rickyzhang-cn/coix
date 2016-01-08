@@ -8,6 +8,7 @@
 
 
 #include "thread_pool.h"
+#include "logger.h"
 
 
 static int thpool_keepalive = 1 ;   //线程池保持存活
@@ -24,20 +25,17 @@ thpool_t * thpool_init (int threadsN){
 
     tp_p =  (thpool_t *)malloc (sizeof (thpool_t)) ;
     if (tp_p == NULL){
-            fprintf (stderr ,"thpool_init (): could not allocate memory for thread pool\n");
-        return NULL ;
+        log_error ("thpool_init (): could not allocate memory for thread pool");
     }
     tp_p->threads = (pthread_t *)malloc (threadsN * sizeof (pthread_t));
     if (tp_p->threads == NULL){
-        fprintf( stderr , "could not allocation memory for thread id\n");
-        return NULL;
+        log_error ("could not allocation memory for thread id");
     }
     tp_p->threadsN = threadsN ;
 
 
     if (thpool_jobqueue_init (tp_p) == -1){
-        fprintf (stderr ,"could not allocate memory for job queue\n");
-        return NULL;
+        log_error ("could not allocate memory for job queue");
         }
 
     /*初始化信号*/
@@ -48,7 +46,7 @@ thpool_t * thpool_init (int threadsN){
 
     int  t ;
     for (t = 0 ; t < threadsN ; t++){
-        printf ("Create thread %d in pool\n", t);
+        log_info ("Create thread %d in pool", t);
 
         //第四个参数是传递给函数指针的一个参数，这个函数指针就是我们所说的线程指针
         if (pthread_create (&(tp_p->threads[t]) , NULL , (void *) thpool_thread_do , (void *)tp_p)){
@@ -73,8 +71,7 @@ void thpool_thread_do (thpool_t *tp_p){
     {
         if (sem_wait (tp_p->jobqueue->queueSem))  //如果工作队列中没有工作，那么所有的线程都将在这里阻塞，当他调用成功的时候，信号量-1
         {
-            fprintf(stderr , "Waiting for semaphore\n");
-            exit (1);
+            log_error("Waiting for semaphore error");
         }
 
         if (thpool_keepalive)
@@ -110,8 +107,7 @@ int thpool_add_work (thpool_t *tp_p ,void * (*function_p )(void *), void *arg_p)
     newjob = (thpool_job_t *)malloc (sizeof (thpool_job_t));
     if (newjob == NULL)
     {
-        fprintf (stderr,"couldnot allocate memory for new job\n");
-        exit (1);
+        log_error ("couldnot allocate memory for new job");
     }
     newjob->function = function_p ;
     newjob->arg = arg_p ;
@@ -132,12 +128,12 @@ void thpool_destory (thpool_t *tp_p){
 
         //sem_post 会使在这个线程上阻塞的线程，不再阻塞
         if (sem_post (tp_p->jobqueue->queueSem) ){
-            fprintf (stderr,"thpool_destory () : could not bypass sem_wait ()\n");
+            log_error ("thpool_destory () : could not bypass sem_wait ()");
         }
 
     }
     if (sem_destroy (tp_p->jobqueue->queueSem)!= 0){
-        fprintf (stderr, "thpool_destory () : could not destroy semaphore\n");
+        log_error ("thpool_destory () : could not destroy semaphore");
     }
 
     for (t = 0 ; t< (tp_p->threadsN) ; t++)
@@ -157,8 +153,7 @@ int thpool_jobqueue_init (thpool_t *tp_p)
     tp_p->jobqueue = (thpool_jobqueue *)malloc (sizeof (thpool_jobqueue));
     if (tp_p->jobqueue == NULL)
     {
-        fprintf (stderr ,"thpool_jobqueue malloc is error\n");
-        return -1 ;
+        log_error ("thpool_jobqueue malloc is error");
     }
     tp_p->jobqueue->tail = NULL ;
     tp_p->jobqueue->head = NULL ;

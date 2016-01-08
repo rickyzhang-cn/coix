@@ -83,10 +83,8 @@ static void send_response_hdr(int cli_fd,int status,char *s_status,char *filetyp
     char header_buff[MAX_HEADER_SIZE];
     memset(header_buff,0,MAX_HEADER_SIZE);
     sprintf(header_buff, "HTTP/1.0 %d %s\r\n", status, s_status);  
-    sprintf(header_buff, "%sServer: Web Server\r\n", header_buff);
-    //sprintf(header_buff, "%sConnection: Keep-Alive\r\n", header_buff);
+    sprintf(header_buff, "%sServer: Coix Web Server\r\n", header_buff);
     sprintf(header_buff, "%sContent-Type: %s\r\n\r\n", header_buff, filetype);
-    //printf("%s\n",header_buff);
     write(cli_fd, header_buff, strlen(header_buff));  
 }
 
@@ -97,8 +95,7 @@ static void send_response_content(int cli_fd, int fd) {
         n=read(fd,response_content+pos,MAX_BUF_SIZE-pos);
         pos+=n;
     }while(n > 0);
-    //response_content[pos]='\0';
-    //printf("%s\n",response_content);
+    response_content[pos]='\0'; //just for safety
     write(cli_fd,response_content,pos);
 }
 
@@ -112,10 +109,10 @@ static void srv_file(int cli_fd, char *file_path) {
 }
 
 static void cgi_get(int cli_fd, char *file_path, char *query_string) {
-    printf("cgi_get() file_path:%s query_string:%s\n",file_path,query_string);
+    log_info("cgi_get() file_path:%s query_string:%s\n",file_path,query_string);
     int in_fd[2],out_fd[2];
     if(pipe(in_fd)<0 || pipe(out_fd)<0) {
-        printf("pipe() error\n");
+        log_error("pipe() error\n");
     }
     pid_t pid=fork();
     if(pid == 0) {
@@ -133,37 +130,39 @@ static void cgi_get(int cli_fd, char *file_path, char *query_string) {
         char response_content[MAX_CONTENT_SIZE];
         int n,pos=0;
         while((n=read(out_fd[0],response_content+pos,MAX_CONTENT_SIZE-pos)) > 0) {
-            printf("n=%d\n",n);
+            //printf("n=%d\n",n);
             pos+=n;
         }
-        printf("n=%d\n",n);
+        //printf("n=%d\n",n);
         //response_content[pos]='\0';
-        printf("cgi_get() response_content:%s",response_content);
+        log_info("cgi_get() response_content:%s",response_content);
         send_response_hdr(cli_fd,200,"OK","text/html");
         write(cli_fd,response_content,pos);
     }
 }
 
 static void cgi_post(int cli_fd, char *file_path, struct http_request *req) {
-    printf("file_path:%s\n",file_path);
+    log_info("file_path:%s\n",file_path);
     int in_fd[2],out_fd[2];
     if(pipe(in_fd)<0 || pipe(out_fd)<0) {
-        printf("pipe() error\n");
+        log_error("pipe() error\n");
         return;
     }
     pid_t pid=fork();
     if(pid == 0) {
-        printf("child file_path:%s\n",file_path);
+        log_info("child file_path:%s\n",file_path);
         close(in_fd[1]);
         close(out_fd[0]);
         setenv("CONTENT_LENGTH",req->content_length,1);
         if(dup2(in_fd[0],STDIN_FILENO) != STDIN_FILENO) {
             perror("dup2 stdin error");
+            log_error("cgi_post() dup2 stdin error");
         }
         close(in_fd[0]);
         
         if(dup2(out_fd[1],STDOUT_FILENO) != STDOUT_FILENO) {
             perror("dup2 stdout error");
+            log_error("cgi_post() dup2 stdout error");
         }
         close(out_fd[1]);
         
@@ -173,22 +172,22 @@ static void cgi_post(int cli_fd, char *file_path, struct http_request *req) {
     } else if(pid > 0) {
         close(in_fd[0]);
         close(out_fd[1]);
-        printf("content_length:%s content:%s\n",req->content_length,req->content);
+        log_info("content_length:%s content:%s\n",req->content_length,req->content);
         
         if(write(in_fd[1],req->content,atoi(req->content_length))<0) {
             perror("write() error\n");
         }
         char response_content[MAX_CONTENT_SIZE];
         int n,pos=0;
-        perror("read() error");
+        //perror("read() error");
         while((n=read(out_fd[0],response_content+pos,MAX_CONTENT_SIZE-pos)) > 0) {
-            printf("n=%d\n",n);
+            //printf("n=%d\n",n);
             pos+=n;
         }
-        printf("n=%d\n",n);
-        perror("read() error");
+        //printf("n=%d\n",n);
+        //perror("read() error");
         //response_content[pos]='\0';
-        printf("cgi_post() response_content:%s\n",response_content);
+        log_info("cgi_post() response_content:%s\n",response_content);
         send_response_hdr(cli_fd,200,"OK","text/html");
         write(cli_fd,response_content,pos);
     }
@@ -213,7 +212,7 @@ void send_response(int cli_fd, struct http_request *req, struct config *conf_p) 
         snprintf(file_path,MAX_PATH_SIZE,"%s%s",htdocs,req->uri);
         if(file_path[strlen(file_path)-1] == '/')
             strcat(file_path,"index.html");
-        printf("file_path:%s\n",file_path);
+        log_info("file_path:%s\n",file_path);
         struct stat st;
         if(stat(file_path,&st) == -1) {
             printf("no file\n");
@@ -229,7 +228,7 @@ void send_response(int cli_fd, struct http_request *req, struct config *conf_p) 
         char file_path[MAX_PATH_SIZE];
         snprintf(file_path,MAX_PATH_SIZE,"%s%s",htdocs,req->uri);
         struct stat st;
-        printf("filepath:%s\n",file_path);
+        log_info("filepath:%s\n",file_path);
         if(stat(file_path,&st) == -1) {
             perror("stat() error");
         } else {
