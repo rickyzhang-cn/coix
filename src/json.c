@@ -143,7 +143,11 @@ static int new_value (json_state * state,
                return 0;
             }
 
-            value->_reserved.object_mem = (*(char **) &value->u.object.values) + values_size;
+            // Calculate the offset using uintptr_t
+            uintptr_t offset = (uintptr_t) value->u.object.values + values_size;
+
+            // Assign to object_mem using the offset
+            value->_reserved.object_mem = (char *) offset;
 
             value->u.object.length = 0;
             break;
@@ -404,18 +408,16 @@ json_value * json_parse_ex (json_settings * settings,
 
                   case json_object:
 
+                     json_char **values_ptr = (json_char **) &top->u.object.values;
                      if (state.first_pass)
-                        (*(json_char **) &top->u.object.values) += string_length + 1;
+                        *values_ptr += string_length + 1;
                      else
                      {  
-                        top->u.object.values [top->u.object.length].name
-                           = (json_char *) top->_reserved.object_mem;
-
-                        top->u.object.values [top->u.object.length].name_length
-                           = string_length;
-
-                        (*(json_char **) &top->_reserved.object_mem) += string_length + 1;
+                        top->u.object.values[top->u.object.length].name = (json_char *) top->_reserved.object_mem;
+                        top->u.object.values[top->u.object.length].name_length = string_length;
+                        *values_ptr += string_length + 1;
                      }
+
 
                      flags |= flag_seek_value | flag_need_colon;
                      continue;

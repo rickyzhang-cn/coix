@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdint.h>  // Include this for intptr_t
 #include <sys/socket.h>
 #include <sys/epoll.h>
 #include <sys/types.h>
@@ -88,10 +89,19 @@ void handle_request(int cli_fd, char *rd_buf) {
 }
 
 void* cli_handler(void *arg) {
-    int cli_fd=(int)arg;
+    int cli_fd=*(int *)arg; // Cast arg to int pointer and dereference it
     char rd_buf[MAX_BUF_SIZE];
     int n=read(cli_fd,rd_buf,MAX_BUF_SIZE);
+	if (n < 0) {
+        perror("Error reading from socket");
+    } else if (n == 0) {
+        printf("Client disconnected\n");
+    } else {
+        handle_request(cli_fd, rd_buf);
+    }
     handle_request(cli_fd,rd_buf);
+	close(cli_fd); 
+	return NULL; 
 }
 
 int main(int argc, char *argv[]) {	
@@ -117,7 +127,7 @@ int main(int argc, char *argv[]) {
             log_info("epoll n=%d",n);
 			if(events[i].data.fd == srv_fd) {
 				struct sockaddr_in cli_addr;
-				int len=sizeof(cli_addr);
+				socklen_t len = sizeof(cli_addr); // Corrected type here
                 while(1) {
 				    int cli_fd=accept(srv_fd,(struct sockaddr *)&cli_addr,&len);
                     log_info("cli_fd=%d",cli_fd);
@@ -129,7 +139,7 @@ int main(int argc, char *argv[]) {
                         if(errno == EINTR)
                             continue;
 				    }
-				    thpool_add_work(tp_p,cli_handler,(void *)cli_fd);
+				    thpool_add_work(tp_p, cli_handler, (void *)(intptr_t)cli_fd); // Cast cli_fd to intptr_t first
                 }
 			} else {
 				log_warn("should not happen:srv_fd=%d,events[%d].data.fd=%d"

@@ -23,11 +23,12 @@ bool logger_create(void)
 
 void logger_free(void)
 {
-	if ( log_p != NULL ) {
-		if ( fileno(log_p->fp) != STDOUT_FILENO )
-			fclose(log_p->fp);
-		free(log_p);
-	}
+    if (log_p != NULL) {
+        if (fileno(log_p->fp) != STDOUT_FILENO)
+            fclose(log_p->fp);
+        free(log_p);
+		log_p = NULL; // Ensure log_p is set to NULL after freeing
+    }
 }
 
 static void log_add(int level, const char *msg)

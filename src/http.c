@@ -1,7 +1,7 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <stdio.h>
-#include <stdlib.h>
+#include <stdlib.h> 
 #include <string.h>
 #include <sys/socket.h>
 #include <sys/epoll.h>
@@ -11,6 +11,7 @@
 #include <netinet/in.h>
 #include <sys/stat.h>
 #include <ctype.h>
+#include "logger.h" // Include logger.h for logging
 
 #include "http.h"
 
@@ -59,7 +60,15 @@ void http_request_parse(char *rb_buf,struct http_request *req) {
         req->content_length[i]='\0';
 
         while(*p=='\r' || *p=='\n') p++;
-        strncpy(req->content,p,MAX_CONTENT_SIZE);
+
+        // Copy content data with proper null-termination
+        size_t content_len = strtoul(req->content_length, NULL, 10);
+        if (content_len < MAX_CONTENT_SIZE) {
+            memcpy(req->content, p, content_len);
+            req->content[content_len] = '\0';  // Null-terminate manually
+        } else {
+            req->content[0] = '\0';  // Null-terminate to ensure safety
+        }
     }
 }
 
@@ -81,22 +90,34 @@ static void get_filetype(char *uri,char **filetype)
 static void send_response_hdr(int cli_fd,int status,char *s_status,char *filetype)
 {
     char header_buff[MAX_HEADER_SIZE];
+    int bytes_written;
     memset(header_buff,0,MAX_HEADER_SIZE);
     sprintf(header_buff, "HTTP/1.0 %d %s\r\n", status, s_status);  
-    sprintf(header_buff, "%sServer: Coix Web Server\r\n", header_buff);
-    sprintf(header_buff, "%sContent-Type: %s\r\n\r\n", header_buff, filetype);
-    write(cli_fd, header_buff, strlen(header_buff));  
+    sprintf(header_buff + strlen(header_buff), "Server: Coix Web Server\r\n");
+    sprintf(header_buff + strlen(header_buff), "Content-Type: %s\r\n\r\n",filetype);
+    bytes_written = write(cli_fd, header_buff, strlen(header_buff));  
+    if (bytes_written == -1) {
+        // Handle error and exit
+        perror("Error writing response header");
+        exit(EXIT_FAILURE);  // Exit the program with a failure status
+    }
 }
 
 static void send_response_content(int cli_fd, int fd) {
     char response_content[MAX_BUF_SIZE];
+    int bytes_written;
     int n,pos=0;
     do {
         n=read(fd,response_content+pos,MAX_BUF_SIZE-pos);
         pos+=n;
     }while(n > 0);
     response_content[pos]='\0'; //just for safety
-    write(cli_fd,response_content,pos);
+    bytes_written = write(cli_fd,response_content,pos);
+    if (bytes_written == -1) {
+        // Handle error and exit
+        perror("Error writing response header");
+        exit(EXIT_FAILURE);  // Exit the program with a failure status
+    }
 }
 
 static void srv_file(int cli_fd, char *file_path) {
@@ -129,6 +150,7 @@ static void cgi_get(int cli_fd, char *file_path, char *query_string) {
         close(out_fd[1]);
         char response_content[MAX_CONTENT_SIZE];
         int n,pos=0;
+        int bytes_written;
         while((n=read(out_fd[0],response_content+pos,MAX_CONTENT_SIZE-pos)) > 0) {
             //printf("n=%d\n",n);
             pos+=n;
@@ -137,7 +159,12 @@ static void cgi_get(int cli_fd, char *file_path, char *query_string) {
         //response_content[pos]='\0';
         log_info("cgi_get() response_content:%s",response_content);
         send_response_hdr(cli_fd,200,"OK","text/html");
-        write(cli_fd,response_content,pos);
+        bytes_written = write(cli_fd,response_content,pos);
+        if (bytes_written == -1) {
+            // Handle error and exit
+            perror("Error writing response header");
+            exit(EXIT_FAILURE);  // Exit the program with a failure status
+        }
     }
 }
 
@@ -179,6 +206,7 @@ static void cgi_post(int cli_fd, char *file_path, struct http_request *req) {
         }
         char response_content[MAX_CONTENT_SIZE];
         int n,pos=0;
+        int bytes_written;
         //perror("read() error");
         while((n=read(out_fd[0],response_content+pos,MAX_CONTENT_SIZE-pos)) > 0) {
             //printf("n=%d\n",n);
@@ -189,12 +217,19 @@ static void cgi_post(int cli_fd, char *file_path, struct http_request *req) {
         //response_content[pos]='\0';
         log_info("cgi_post() response_content:%s\n",response_content);
         send_response_hdr(cli_fd,200,"OK","text/html");
-        write(cli_fd,response_content,pos);
+        bytes_written = write(cli_fd,response_content,pos);
+
+        if (bytes_written == -1) {
+            // Handle error and exit
+            perror("Error writing response header");
+            exit(EXIT_FAILURE);  // Exit the program with a failure status
+        }
     }
 }
 
 void send_response(int cli_fd, struct http_request *req, struct config *conf_p) {
     char *htdocs=conf_p->htdocs;
+    char *filetype = NULL;  // Initialize filetype to NULL
     if(strncmp("GET",req->method,strlen("GET")) == 0) {
         char *query_string=req->uri;
         int cgi_flag=0;
@@ -218,10 +253,13 @@ void send_response(int cli_fd, struct http_request *req, struct config *conf_p) 
             printf("no file\n");
         } else {
             printf("file_path:%s\n",file_path);
-            if(cgi_flag == 0)
-                srv_file(cli_fd,file_path);
-            else
+            if (cgi_flag == 0) {
+                srv_file(cli_fd, file_path);
+                get_filetype(file_path, &filetype);
+            }else{
                 cgi_get(cli_fd,file_path,query_string);
+                filetype = "text/html"; 
+            }
         }
 
     } else if(strcmp("POST",req->method) == 0) {
@@ -236,4 +274,8 @@ void send_response(int cli_fd, struct http_request *req, struct config *conf_p) 
         }
         
     } 
+
+    if (filetype == NULL) {
+        filetype = "text/plain";  // Default value if filetype is not set
+    }
 }

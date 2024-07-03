@@ -69,8 +69,8 @@ void send_http_head(int conn_socket, int status, char *s_status, char *filetype)
 	char buf[MAX];
 	memset(buf, 0, MAX);
 	sprintf(buf, "HTTP/1.0 %d %s\r\n", status, s_status);
-	sprintf(buf, "%sServer: Reage Web Server\r\n", buf);
-	sprintf(buf, "%sContent-Type: %s\r\n\r\n", buf, filetype);
+    sprintf(buf + strlen(buf), "Server: Reage Web Server\r\n");
+    sprintf(buf + strlen(buf), "Content-Type: %s\r\n\r\n", filetype);
 	write(conn_socket, buf, strlen(buf));
 } 
 
@@ -221,6 +221,7 @@ int do_uri_get(int conn_socket, char *uri){
 	//关于get Query_String 为提供处理方法
 	else
 	send_html(conn_socket, uri);
+	return 0;
 }
 
 void ulog(char *msg){}

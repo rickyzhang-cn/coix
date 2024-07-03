@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <getopt.h>
 #include <sys/stat.h>
-
+#include "server.h"
 #include "json.h"
 #include "options_parser.h"
 #include "logger.h"

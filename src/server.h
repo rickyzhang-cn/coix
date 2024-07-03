@@ -3,7 +3,7 @@
 #include "thread_pool.h"
 
 #define MAX_ADDR_LEN 16
-#define MAX_PATH_SIZE 256
+#define MAX_PATH_SIZE 2048
 
 struct config {
 	unsigned int port;
